@@ -1,0 +1,8 @@
+pyautogui
+pywin32
+mss
+opencv-python
+numpy
+pytesseract
+PySide6-Essentials>=6.6,<7
+pyinstaller>=6.10,<7
