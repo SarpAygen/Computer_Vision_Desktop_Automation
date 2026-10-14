@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+.build-venv/
+hallows_macro_settings.json
+hotbar_debug_*.png
+hotbar_raw_*.png
+hotbar_readings_*.json
+hotbar_failure_*.zip
