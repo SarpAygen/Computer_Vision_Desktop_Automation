@@ -1,0 +1,5 @@
+3.4.0 hotbar processing comparison (local CPU; capture/input/OCR excluded)
+PASS identical geometry, selection and card type on 32 original/resized/blurred/covered/blank fixture variants
+PASS identical selection verdicts on 500 synthetic blue-edge/noise samples
+Warm median snapshot time, 5 batches x 100: 3.3.4 = 3.687 ms; 3.4.0 = 1.937 ms
+Local processing reduction: 47.5%; this is not whole-macro or live-game latency.

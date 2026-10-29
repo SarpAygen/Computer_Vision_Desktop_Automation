@@ -1,0 +1,643 @@
+VERSION 3.3 — Halloween interface and reduced UI overhead
+2026-10-15
+
+Validation: Linux replay, real OpenCV/Tesseract, detector threads and offscreen Qt.
+The desktop interface was reviewed at 1280x900 and 1000x700 logical pixels.
+Qt controls were exercised with default and 125 percent offscreen scaling.
+Windows input/focus and Roblox responses are mocked. No live game or Windows executable test was performed.
+Local replay measurements do not establish whole-application CPU usage or live game latency.
+
+PASS core event, equipment, hotbar and scheduling functions retain the version 3.2 syntax tree.
+PASS new interface rendered and reviewed across dashboard, all settings categories, diagnostics and activity.
+
+Event priority regression
+PASS slow OCR interrupted by latched event-end in 1 ms; stale result discarded
+PASS visual start: end detected in 124 ms; countdown change ignored
+PASS OCR-assisted start: end detected in 103 ms; countdown change ignored
+PASS stale positive OCR rejected against current banner
+PASS manual equip command is tracked even when the event ends during the keypress
+PASS active events suspend all chores; cleanup precedes a back-to-back event and idle work resumes afterward
+Windows focus and input are mocked. Measured timings are local replay results, not live Roblox guarantees.
+
+Disconnected window and popup recovery
+PASS secondary disconnect stays excluded; original slots preserved; stale input blocked
+PASS window closes mid-pass: both remaining windows continue
+PASS disconnected main window at startup is skipped; event source promoted
+PASS completion excludes invalid windows; no windows stops safely
+PASS foreground maintenance excludes a disconnected window and verifies the other two
+PASS independent connection monitor excludes a disconnected event source during an event
+PASS active event survives main-window closure; replacement detects the actual event end
+PASS stale positive OCR from a disconnected source is discarded
+PASS real Daily Rewards title/X detected at 75%, 100%, 125%, 150%; missing title or X rejected
+PASS moved-window click lands on red X; disappearing popup and an event during OCR prevent clicks
+PASS popup checks are rate limited per window, deferred during events, and configurable
+Windows focus and input are mocked. Live Roblox acceptance and unseen popup layouts are not verified.
+
+Confirmed cleanup and countdown protection
+PASS three-window dropped-key replay: first sweep 0.315s; all visually confirmed by 0.875s (simulated focus/input delays)
+PASS delayed toggle acknowledgements do not re-equip characters
+PASS missed toggle is retried using current selected slot, not an old commanded flag
+PASS slot 10/key 0 cleanup and repeated event-end acknowledgement do not re-toggle
+PASS hidden animation stays pending for 30 seconds; confirmed peers continue; no re-equip before confirmation
+PASS refused focus remains in recovery while the other windows are put away
+PASS a key-blocking popup is closed after the other windows receive their first put-away
+PASS late idle equip overrides an old put-away command and triggers recovery
+PASS hidden or unknown selection is not mistaken for a confirmed unequip
+PASS real selected hotbar recognized; known rod artwork enables repeatable put-away; character artwork rejected
+PASS real countdown OCR; two decreasing consistent readings required; 2-second margin and disabled margin
+PASS countdown triggers early cleanup once; old title cannot re-equip; a subsequent event starts normally
+PASS countdown OCR failure leaves fast visual cleanup working
+PASS extended banner occlusion triggers protective cleanup without a global pause
+Input timing is simulated; image processing/OCR and detector threads are real. No live Windows/Roblox guarantee.
+
+Real offscreen Qt interface
+PASS real Qt navigation: all 4 main pages, 4 settings categories and 3 diagnostic categories at 1280 and 1000 px
+PASS settings bindings and persistence across categories; webhook remains masked
+PASS skipped and absent windows, mutation progress and explicit cleanup confirmation states
+PASS 600-message UI burst: 3 batched appends, zero full document replacements (22 ms local replay)
+PASS warning/equipment search filters and bounded 1500-line log retention
+PASS preview reuse, hidden-tab work suppression and stale/covered image replacement
+PASS reduced motion, hidden-page timer suspension, running-state locks, Stop and restart reset
+Windows input, actual game rendering and real monitor DPI remain untested.
+
+Offscreen Qt at 125 percent scaling
+PASS real Qt navigation: all 4 main pages, 4 settings categories and 3 diagnostic categories at 1280 and 1000 px
+PASS settings bindings and persistence across categories; webhook remains masked
+PASS skipped and absent windows, mutation progress and explicit cleanup confirmation states
+PASS 600-message UI burst: 3 batched appends, zero full document replacements (26 ms local replay)
+PASS warning/equipment search filters and bounded 1500-line log retention
+PASS preview reuse, hidden-tab work suppression and stale/covered image replacement
+PASS reduced motion, hidden-page timer suspension, running-state locks, Stop and restart reset
+Windows input, actual game rendering and real monitor DPI remain untested.
+
+Performance and preview invariants
+PASS 25 diagnostic frames publish 5 image copies; covered/recovered states are immediate and keys remain independent
+PASS cached immutable template bank with independent per-matcher state; 500 warm initializations in 0.2 ms
+PASS real positive/negative/banner-return sequence; no game verdicts or hotbar readings are cached
+
+--- Previous release validation ---
+
+VERSION 3.2 — confirmed put-away, missed-input recovery and countdown safety margin
+2026-10-15
+
+Validation: Linux replay with real OpenCV, Tesseract, detector threads and offscreen Qt.
+Windows focus, SendInput acceptance, and game response are simulated.
+No live Roblox session or Windows executable was tested. Replay timings are not live guarantees.
+
+Confirmed cleanup, countdown and recovery regression
+PASS three-window dropped-key replay: first sweep 0.315s; all visually confirmed by 0.875s (simulated focus/input delays)
+PASS delayed toggle acknowledgements do not re-equip characters
+PASS missed toggle is retried using current selected slot, not an old commanded flag
+PASS slot 10/key 0 cleanup and repeated event-end acknowledgement do not re-toggle
+PASS hidden animation stays pending for 30 seconds; confirmed peers continue; no re-equip before confirmation
+PASS refused focus remains in recovery while the other windows are put away
+PASS a key-blocking popup is closed after the other windows receive their first put-away
+PASS late idle equip overrides an old put-away command and triggers recovery
+PASS hidden or unknown selection is not mistaken for a confirmed unequip
+PASS real selected hotbar recognized; known rod artwork enables repeatable put-away; character artwork rejected
+PASS real countdown OCR; two decreasing consistent readings required; 2-second margin and disabled margin
+PASS countdown triggers early cleanup once; old title cannot re-equip; a subsequent event starts normally
+PASS countdown OCR failure leaves fast visual cleanup working
+PASS extended banner occlusion triggers protective cleanup without a global pause
+Input timing is simulated; image processing/OCR and detector threads are real. No live Windows/Roblox guarantee.
+
+Event priority regression
+PASS slow OCR interrupted by latched event-end in 1 ms; stale result discarded
+PASS visual start: end detected in 121 ms; countdown change ignored
+PASS OCR-assisted start: end detected in 103 ms; countdown change ignored
+PASS stale positive OCR rejected against current banner
+PASS manual equip command is tracked even when the event ends during the keypress
+PASS active events suspend all chores; cleanup precedes a back-to-back event and idle work resumes afterward
+Windows focus and input are mocked. Measured timings are local replay results, not live Roblox guarantees.
+
+Window recovery and Daily Rewards regression
+PASS secondary disconnect stays excluded; original slots preserved; stale input blocked
+PASS window closes mid-pass: both remaining windows continue
+PASS disconnected main window at startup is skipped; event source promoted
+PASS completion excludes invalid windows; no windows stops safely
+PASS foreground maintenance excludes a disconnected window and verifies the other two
+PASS independent connection monitor excludes a disconnected event source during an event
+PASS active event survives main-window closure; replacement detects the actual event end
+PASS stale positive OCR from a disconnected source is discarded
+PASS real Daily Rewards title/X detected at 75%, 100%, 125%, 150%; missing title or X rejected
+PASS moved-window click lands on red X; disappearing popup and an event during OCR prevent clicks
+PASS popup checks are rate limited per window, deferred during events, and configurable
+Windows focus and input are mocked. Live Roblox acceptance and unseen popup layouts are not verified.
+
+Hotbar regression
+PASS top-right slots 2-5: no false red-label warnings across 5 crop alignments
+PASS latest main and bottom-left captures: characters retained, all potions excluded, next slot 2
+PASS real Dracula label remains detected with 0-4 pixel downward crop errors
+PASS unreadable red lettering and unidentified coloured cards remain unknown
+Supplied debug PNGs are annotated; Windows focus/input and live gameplay are not tested here.
+
+Rotation regression
+Screenshot: [(1, (176, 29, 44, 44), False, None, 'item; excluded from rotation'), (2, (221, 29, 44, 44), False, True, 'B[Drocula)|'), (3, (266, 29, 44, 44), False, False, 'no red mutation label'), (4, (311, 29, 44, 44), False, False, 'no red mutation label'), (5, (356, 29, 44, 44), False, False, 'no red mutation label'), (6, (402, 29, 44, 44), False, False, 'no red mutation label'), (7, (447, 29, 44, 44), False, False, 'no red mutation label'), (8, (492, 29, 44, 44), False, False, 'no red mutation label'), (9, (538, 29, 44, 44), False, False, 'no red mutation label'), (10, (582, 29, 44, 44), False, False, 'no red mutation label')]
+Recentered: 2 detected 2 target 0
+Recentered: 3 detected 3 target 3
+Recentered: 5 detected 5 target 3
+Recentered: 7 detected 7 target 3
+PASS: full reference, recentered inventories, incomplete-row rejection
+Blue highlight: 2 selected [2] next 3
+Blue highlight: 3 selected [3] next 3
+Blue highlight: 9 selected [9] next 3
+Blue highlight: 10 selected [10] next 3
+All mutation reads: [(1, None, 'item; excluded from rotation'), (2, True, 'B[Drocula)|'), (3, True, 'B[ Dracula)'), (4, True, 'B[ Dracula)'), (5, True, 'B(Drocula)|'), (6, True, 'iDrocula)l'), (7, True, '‘Dracula'), (8, True, '‘Dracula'), (9, True, '(Orocula'), (10, True, 'i[Drocula)}')]
+PASS: numbered selected borders, successive Dracula, all-complete detection
+PASS: rotation, no accidental retoggle, event-end cleanup, all-complete, unknown, rod, key 0
+
+Offscreen desktop interface checks
+PASS real Qt: countdown margin and Daily Rewards toggle persist; skipped status resists late state messages; restart clears exclusions
+
+--- Previous release validation ---
+
+VERSION 3.1 — disconnected window exclusion and Daily Rewards closing
+2026-10-15
+
+Validation: Linux replay, real OpenCV/Tesseract and offscreen Qt; Windows focus/input mocked.
+No live Roblox, Windows executable, or reconnect test was performed.
+
+Event priority regression
+PASS slow OCR interrupted by latched event-end in 21 ms; stale result discarded
+PASS visual start: end detected in 209 ms; countdown change ignored
+PASS OCR-assisted start: end detected in 183 ms; countdown change ignored
+PASS stale positive OCR rejected against current banner
+PASS manual equip command is tracked even when the event ends during the keypress
+PASS smart and fallback cleanup uses each tracked key once, including key 0, before a subsequent event
+PASS active events suspend all chores; cleanup precedes a back-to-back event and idle work resumes afterward
+Windows focus and input are mocked. Measured timings are local replay results, not live Roblox guarantees.
+
+Window recovery and Daily Rewards regression
+PASS secondary disconnect stays excluded; original slots preserved; stale input blocked
+PASS window closes mid-pass: both remaining windows continue
+PASS disconnected main window at startup is skipped; event source promoted
+PASS event cleanup continues after focus failure; completion excludes invalid windows; no windows stops safely
+PASS foreground maintenance excludes a disconnected window and verifies the other two
+PASS independent connection monitor excludes a disconnected event source during an event
+PASS active event survives main-window closure; replacement detects the actual event end
+PASS stale positive OCR from a disconnected source is discarded
+PASS real Daily Rewards title/X detected at 75%, 100%, 125%, 150%; missing title or X rejected
+PASS moved-window click lands on red X; disappearing popup and an event during OCR prevent clicks
+PASS popup checks are rate limited per window, deferred during events, and configurable
+Windows focus and input are mocked. Live Roblox acceptance and unseen popup layouts are not verified.
+
+Hotbar regression
+PASS top-right slots 2-5: no false red-label warnings across 5 crop alignments
+PASS latest main and bottom-left captures: characters retained, all potions excluded, next slot 2
+PASS real Dracula label remains detected with 0-4 pixel downward crop errors
+PASS unreadable red lettering and unidentified coloured cards remain unknown
+Supplied debug PNGs are annotated; Windows focus/input and live gameplay are not tested here.
+
+Manual fallback regression
+PASS fallback preserves slot 3 and sends once per event transition without scans
+PASS fast put-away uses tracked slot once and preserves key after fallback
+PASS no new equip when the event has already ended
+PASS visible-but-uncertain reads retry then fall back without pausing or retoggling
+
+UI regression
+PASS real Qt: Daily Rewards toggle persists; skipped status resists late state messages; restart clears exclusions
+
+PASS application, test, and build script syntax.
+
+Previous version validation (historical):
+
+VERSION 3.0 — event priority and prompt end cleanup
+2026-10-14
+
+PASS slow OCR interrupted by latched event-end in 21 ms; stale result discarded
+PASS visual start: end detected in 201 ms; countdown change ignored
+PASS OCR-assisted start: end detected in 266 ms; countdown change ignored
+PASS stale positive OCR rejected against current banner
+PASS manual equip command is tracked even when the event ends during the keypress
+PASS smart and fallback cleanup uses each tracked key once, including key 0, before a subsequent event
+PASS active events suspend all chores; cleanup precedes a back-to-back event and idle work resumes afterward
+Windows focus and input are mocked. Measured timings are local replay results, not live Roblox guarantees.
+
+PASS existing mutation crop/potion regression checks (2.9).
+PASS dynamic hotbar, real Dracula labels, selected slots, consecutive mutations and key 0 regression checks.
+PASS eight real failed-capture frames and incomplete row rejection.
+PASS manual fallback retry and single-toggle regression checks.
+PASS application syntax.
+
+VERSION 2.9 — targeted label and potion fixes
+Source AST syntax: PASS
+
+test_hotbar_29.py
+PASS top-right slots 2-5: no false red-label warnings across 5 crop alignments
+PASS latest main and bottom-left captures: characters retained, all potions excluded, next slot 2
+PASS real Dracula label remains detected with 0-4 pixel downward crop errors
+PASS unreadable red lettering and unidentified coloured cards remain unknown
+Supplied debug PNGs are annotated; Windows focus/input and live gameplay are not tested here.
+
+test_rotation_updated.py
+Screenshot: [(1, (176, 29, 44, 44), False, None, 'item; excluded from rotation'), (2, (221, 29, 44, 44), False, True, 'B[Drocula)|'), (3, (266, 29, 44, 44), False, False, 'no red mutation label'), (4, (311, 29, 44, 44), False, False, 'no red mutation label'), (5, (356, 29, 44, 44), False, False, 'no red mutation label'), (6, (402, 29, 44, 44), False, False, 'no red mutation label'), (7, (447, 29, 44, 44), False, False, 'no red mutation label'), (8, (492, 29, 44, 44), False, False, 'no red mutation label'), (9, (538, 29, 44, 44), False, False, 'no red mutation label'), (10, (582, 29, 44, 44), False, False, 'no red mutation label')]
+Recentered: 2 detected 2 target 0
+Recentered: 3 detected 3 target 3
+Recentered: 5 detected 5 target 3
+Recentered: 7 detected 7 target 3
+PASS: full reference, recentered inventories, incomplete-row rejection
+Blue highlight: 2 selected [2] next 3
+Blue highlight: 3 selected [3] next 3
+Blue highlight: 9 selected [9] next 3
+Blue highlight: 10 selected [10] next 3
+All mutation reads: [(1, None, 'item; excluded from rotation'), (2, True, 'B[Drocula)|'), (3, True, 'B[ Dracula)'), (4, True, 'B[ Dracula)'), (5, True, 'B(Drocula)|'), (6, True, 'iDrocula)l'), (7, True, '‘Dracula'), (8, True, '‘Dracula'), (9, True, '(Orocula'), (10, True, 'i[Drocula)}')]
+PASS: numbered selected borders, successive Dracula, all-complete detection
+PASS: rotation, no accidental retoggle, event-end cleanup, all-complete, unknown, rod, key 0
+
+test_hotbar_23.py
+PASS actual capture 1: 10 slots, next character 2, items [10] excluded
+PASS capture 1: removing each slot in turn rejects incomplete rows
+PASS actual capture 2: 4 slots, next character 2, items [4] excluded
+PASS capture 2: removing each slot in turn rejects incomplete rows
+PASS actual capture 3: 10 slots, next character 2, items [3, 4, 5, 6, 7, 8, 9, 10] excluded
+PASS capture 3: removing each slot in turn rejects incomplete rows
+PASS empty capture rejected
+
+test_smart_24.py
+PASS latest screenshot window 1: full row found; every missing-slot variant rejected
+PASS latest screenshot window 2: full row found; every missing-slot variant rejected
+PASS latest screenshot window 3: full row found; every missing-slot variant rejected
+PASS Smart rotation startup: actual image reads for all three windows; no pause; slot 2 selected
+Windows focus/visibility mocked; this is not a live Windows/game test.
+
+test_failure_26.py
+PASS all 8 actual failed frames: 10 slots, 8 characters, potion excluded; no selected slot
+PASS removing each slot still rejects incomplete hotbars despite adjacent status icons
+PASS exact event-inactive replay confirms two frames and returns without an unnecessary keypress
+Windows focus/visibility mocked; image processing uses the unmodified failure captures.
+
+Windows focus/input is mocked; live gameplay has not been tested.
+
+Macro Studio 2.8 validation
+Windows focus/timing and webhook HTTP requests mocked. No real notifications sent; live game/UI not tested.
+
+PASS fallback preserves slot 3 and sends once per event transition without scans
+PASS fast put-away uses tracked slot once and preserves key after fallback
+PASS no new equip when the event has already ended
+PASS visible-but-uncertain reads retry then fall back without pausing or retoggling
+
+PASS confirmed Dracula deduplicates; event alert queues; non-HTTPS URL rejected
+PASS mocked HTTPS delivery, timeout, payload and redacted failure logging; no network requests sent
+
+PASS latest screenshot window 1: full row found; every missing-slot variant rejected
+PASS latest screenshot window 2: full row found; every missing-slot variant rejected
+PASS latest screenshot window 3: full row found; every missing-slot variant rejected
+PASS Smart rotation startup: actual image reads for all three windows; no pause; slot 2 selected
+Windows focus/visibility mocked; this is not a live Windows/game test.
+
+PASS screenshot window 1: 10 slots, item slots [10], no consumable selection
+PASS screenshot window 2: 4 slots, item slots [4], no consumable selection
+PASS screenshot window 3: 8 slots, item slots [3, 4, 5, 6, 7, 8], no consumable selection
+PASS earlier setup screenshot: 10 slots, Dracula slot 2, next slot 3
+PASS bottom-edge coordinates and tracked-vs-unrelated overlap distinction
+PASS overlapping startup scans one foreground window at a time and restores main
+PASS 22-second overlapping-hotbar simulation: no pause, start/end still detected
+PASS tracked overlap over banner retains verdict without a false pause
+
+PASS all 8 actual failed frames: 10 slots, 8 characters, potion excluded; no selected slot
+PASS removing each slot still rejects incomplete hotbars despite adjacent status icons
+PASS exact event-inactive replay confirms two frames and returns without an unnecessary keypress
+Windows focus/visibility mocked; image processing uses the unmodified failure captures.
+
+Rotation progression/equipped-slot/event-end regression suite: PASS.
+
+Historical validation:
+
+Macro Studio 2.7 validation
+Simulated 30-second hidden HUD, recovery to current desired event state and persistent timeout.
+Windows timing/focus mocked; no live catch animation tested.
+
+PASS 30-second hidden HUD leaves inputs untouched without stopping the macro
+PASS recovery retries latest event state and clears pending window
+PASS persistent hidden HUD beyond grace period pauses and preserves failure diagnostics
+
+PASS valid / unreadable / valid sequence recovers despite inner/outer border changes
+PASS contradictory readable mutation states do not form a consensus; all 8 frames retained
+PASS persistent detection failure remains unconfirmed
+PASS event-end scan confirms a selected character without mutation OCR
+PASS event-start scan still rejects unknown mutations
+PASS event-end scan rejects unknown selected card type
+PASS persistent runtime failure pauses and saves the actual 8-frame sequence
+
+PASS all 8 actual failed frames: 10 slots, 8 characters, potion excluded; no selected slot
+PASS removing each slot still rejects incomplete hotbars despite adjacent status icons
+PASS exact event-inactive replay confirms two frames and returns without an unnecessary keypress
+Windows focus/visibility mocked; image processing uses the unmodified failure captures.
+
+PASS latest screenshot window 1: full row found; every missing-slot variant rejected
+PASS latest screenshot window 2: full row found; every missing-slot variant rejected
+PASS latest screenshot window 3: full row found; every missing-slot variant rejected
+PASS Smart rotation startup: actual image reads for all three windows; no pause; slot 2 selected
+Windows focus/visibility mocked; this is not a live Windows/game test.
+
+PASS screenshot window 1: 10 slots, item slots [10], no consumable selection
+PASS screenshot window 2: 4 slots, item slots [4], no consumable selection
+PASS screenshot window 3: 8 slots, item slots [3, 4, 5, 6, 7, 8], no consumable selection
+PASS earlier setup screenshot: 10 slots, Dracula slot 2, next slot 3
+PASS bottom-edge coordinates and tracked-vs-unrelated overlap distinction
+PASS overlapping startup scans one foreground window at a time and restores main
+PASS 22-second overlapping-hotbar simulation: no pause, start/end still detected
+PASS tracked overlap over banner retains verdict without a false pause
+
+Screenshot: [(1, (176, 29, 44, 44), False, None, 'item; excluded from rotation'), (2, (221, 29, 44, 44), False, True, 'B[Drocula)|'), (3, (266, 29, 44, 44), False, False, 'no red mutation label'), (4, (311, 29, 44, 44), False, False, 'no red mutation label'), (5, (356, 29, 44, 44), False, False, 'no red mutation label'), (6, (402, 29, 44, 44), False, False, 'no red mutation label'), (7, (447, 29, 44, 44), False, False, 'no red mutation label'), (8, (492, 29, 44, 44), False, False, 'no red mutation label'), (9, (538, 29, 44, 44), False, False, 'no red mutation label'), (10, (582, 29, 44, 44), False, False, 'no red mutation label')]
+Recentered: 2 detected 2 target 0
+Recentered: 3 detected 3 target 3
+Recentered: 5 detected 5 target 3
+Recentered: 7 detected 7 target 3
+PASS: full reference, recentered inventories, incomplete-row rejection
+Blue highlight: 2 selected [2] next 3
+Blue highlight: 3 selected [3] next 3
+Blue highlight: 9 selected [9] next 3
+Blue highlight: 10 selected [10] next 3
+All mutation reads: [(1, None, 'item; excluded from rotation'), (2, True, 'B[Drocula)|'), (3, True, 'B[ Dracula)'), (4, True, 'B[ Dracula)'), (5, True, 'B(Drocula)|'), (6, True, 'iDrocula)l'), (7, True, '‘Dracula'), (8, True, '‘Dracula'), (9, True, '(Orocula'), (10, True, 'i[Drocula)}')]
+PASS: numbered selected borders, successive Dracula, all-complete detection
+PASS: rotation, no accidental retoggle, event-end cleanup, all-complete, unknown, rod, key 0
+
+Historical validation:
+
+Macro Studio 2.6 validation
+Exact failure ZIP replay: 8/8 frames recovered after excluding out-of-range status-icon anchors.
+Windows focus/visibility mocked; actual supplied images used without modification.
+
+PASS all 8 actual failed frames: 10 slots, 8 characters, potion excluded; no selected slot
+PASS removing each slot still rejects incomplete hotbars despite adjacent status icons
+PASS exact event-inactive replay confirms two frames and returns without an unnecessary keypress
+Windows focus/visibility mocked; image processing uses the unmodified failure captures.
+
+PASS valid / unreadable / valid sequence recovers despite inner/outer border changes
+PASS contradictory readable mutation states do not form a consensus; all 8 frames retained
+PASS persistent detection failure remains unconfirmed
+PASS event-end scan confirms a selected character without mutation OCR
+PASS event-start scan still rejects unknown mutations
+PASS event-end scan rejects unknown selected card type
+PASS persistent runtime failure pauses and saves the actual 8-frame sequence
+
+PASS latest screenshot window 1: full row found; every missing-slot variant rejected
+PASS latest screenshot window 2: full row found; every missing-slot variant rejected
+PASS latest screenshot window 3: full row found; every missing-slot variant rejected
+PASS Smart rotation startup: actual image reads for all three windows; no pause; slot 2 selected
+Windows focus/visibility mocked; this is not a live Windows/game test.
+
+PASS actual capture 1: 10 slots, next character 2, items [10] excluded
+PASS capture 1: removing each slot in turn rejects incomplete rows
+PASS actual capture 2: 4 slots, next character 2, items [4] excluded
+PASS capture 2: removing each slot in turn rejects incomplete rows
+PASS actual capture 3: 10 slots, next character 2, items [3, 4, 5, 6, 7, 8, 9, 10] excluded
+PASS capture 3: removing each slot in turn rejects incomplete rows
+PASS empty capture rejected
+
+PASS latest selected-slot screenshot: 10 cards, slot 2 equipped, potion excluded
+PASS grid fallback rejects blank/missing middle cards instead of guessing their presence
+PASS visibility uses detected card bounds, excluding lower frame/unused crop margins
+PASS a transient failed frame retries and recovers before any character input
+PASS 12-second background read failure in manual mode: no false global pause
+PASS 12-second background read failure in rotation mode: no false global pause
+PASS genuine disconnect still triggers safety pause
+
+PASS screenshot window 1: 10 slots, item slots [10], no consumable selection
+PASS screenshot window 2: 4 slots, item slots [4], no consumable selection
+PASS screenshot window 3: 8 slots, item slots [3, 4, 5, 6, 7, 8], no consumable selection
+PASS earlier setup screenshot: 10 slots, Dracula slot 2, next slot 3
+PASS bottom-edge coordinates and tracked-vs-unrelated overlap distinction
+PASS overlapping startup scans one foreground window at a time and restores main
+PASS 22-second overlapping-hotbar simulation: no pause, start/end still detected
+PASS tracked overlap over banner retains verdict without a false pause
+
+Screenshot: [(1, (176, 29, 44, 44), False, None, 'item; excluded from rotation'), (2, (221, 29, 44, 44), False, True, 'B[Drocula)|'), (3, (266, 29, 44, 44), False, False, 'no red mutation label'), (4, (311, 29, 44, 44), False, False, 'no red mutation label'), (5, (356, 29, 44, 44), False, False, 'no red mutation label'), (6, (402, 29, 44, 44), False, False, 'no red mutation label'), (7, (447, 29, 44, 44), False, False, 'no red mutation label'), (8, (492, 29, 44, 44), False, False, 'no red mutation label'), (9, (538, 29, 44, 44), False, False, 'no red mutation label'), (10, (582, 29, 44, 44), False, False, 'no red mutation label')]
+Recentered: 2 detected 2 target 0
+Recentered: 3 detected 3 target 3
+Recentered: 5 detected 5 target 3
+Recentered: 7 detected 7 target 3
+PASS: full reference, recentered inventories, incomplete-row rejection
+Blue highlight: 2 selected [2] next 3
+Blue highlight: 3 selected [3] next 3
+Blue highlight: 9 selected [9] next 3
+Blue highlight: 10 selected [10] next 3
+All mutation reads: [(1, None, 'item; excluded from rotation'), (2, True, 'B[Drocula)|'), (3, True, 'B[ Dracula)'), (4, True, 'B[ Dracula)'), (5, True, 'B(Drocula)|'), (6, True, 'iDrocula)l'), (7, True, '‘Dracula'), (8, True, '‘Dracula'), (9, True, '(Orocula'), (10, True, 'i[Drocula)}')]
+PASS: numbered selected borders, successive Dracula, all-complete detection
+PASS: rotation, no accidental retoggle, event-end cleanup, all-complete, unknown, rod, key 0
+
+Historical validation:
+
+Macro Studio 2.5 validation
+Real screenshot processing; Windows focus and timing mocked. No live game test.
+Latest log contains no failed image, so the exact intermittent visual cause remains unconfirmed.
+
+PASS valid / unreadable / valid sequence recovers despite inner/outer border changes
+PASS contradictory readable mutation states do not form a consensus; all 8 frames retained
+PASS persistent detection failure remains unconfirmed
+PASS event-end scan confirms a selected character without mutation OCR
+PASS event-start scan still rejects unknown mutations
+PASS event-end scan rejects unknown selected card type
+
+PASS latest screenshot window 1: full row found; every missing-slot variant rejected
+PASS latest screenshot window 2: full row found; every missing-slot variant rejected
+PASS latest screenshot window 3: full row found; every missing-slot variant rejected
+PASS Smart rotation startup: actual image reads for all three windows; no pause; slot 2 selected
+Windows focus/visibility mocked; this is not a live Windows/game test.
+
+PASS actual capture 1: 10 slots, next character 2, items [10] excluded
+PASS capture 1: removing each slot in turn rejects incomplete rows
+PASS actual capture 2: 4 slots, next character 2, items [4] excluded
+PASS capture 2: removing each slot in turn rejects incomplete rows
+PASS actual capture 3: 10 slots, next character 2, items [3, 4, 5, 6, 7, 8, 9, 10] excluded
+PASS capture 3: removing each slot in turn rejects incomplete rows
+PASS empty capture rejected
+
+PASS latest selected-slot screenshot: 10 cards, slot 2 equipped, potion excluded
+PASS grid fallback rejects blank/missing middle cards instead of guessing their presence
+PASS visibility uses detected card bounds, excluding lower frame/unused crop margins
+PASS a transient failed frame retries and recovers before any character input
+PASS 12-second background read failure in manual mode: no false global pause
+PASS 12-second background read failure in rotation mode: no false global pause
+PASS genuine disconnect still triggers safety pause
+
+PASS screenshot window 1: 10 slots, item slots [10], no consumable selection
+PASS screenshot window 2: 4 slots, item slots [4], no consumable selection
+PASS screenshot window 3: 8 slots, item slots [3, 4, 5, 6, 7, 8], no consumable selection
+PASS earlier setup screenshot: 10 slots, Dracula slot 2, next slot 3
+PASS bottom-edge coordinates and tracked-vs-unrelated overlap distinction
+PASS overlapping startup scans one foreground window at a time and restores main
+PASS 22-second overlapping-hotbar simulation: no pause, start/end still detected
+PASS tracked overlap over banner retains verdict without a false pause
+
+PASS rotation regression suite: Dracula progression, all-complete, unknown, selected slots and event-end cleanup.
+PASS persistent runtime failure pauses and saves the actual 8-frame sequence.
+
+Historical validation:
+
+Macro Studio 2.4 validation
+Actual screenshot processing with mocked Windows focus and visibility. Live game not tested.
+Window 2 zero-card scan from the activity log not reproduced from the desktop screenshot.
+
+PASS latest screenshot window 1: full row found; every missing-slot variant rejected
+PASS latest screenshot window 2: full row found; every missing-slot variant rejected
+PASS latest screenshot window 3: full row found; every missing-slot variant rejected
+PASS Smart rotation startup: actual image reads for all three windows; no pause; slot 2 selected
+Windows focus/visibility mocked; this is not a live Windows/game test.
+
+PASS actual capture 1: 10 slots, next character 2, items [10] excluded
+PASS capture 1: removing each slot in turn rejects incomplete rows
+PASS actual capture 2: 4 slots, next character 2, items [4] excluded
+PASS capture 2: removing each slot in turn rejects incomplete rows
+PASS actual capture 3: 10 slots, next character 2, items [3, 4, 5, 6, 7, 8, 9, 10] excluded
+PASS capture 3: removing each slot in turn rejects incomplete rows
+PASS empty capture rejected
+
+PASS latest selected-slot screenshot: 10 cards, slot 2 equipped, potion excluded
+PASS grid fallback rejects blank/missing middle cards instead of guessing their presence
+PASS visibility uses detected card bounds, excluding lower frame/unused crop margins
+PASS a transient failed frame retries and recovers before any character input
+PASS 12-second background read failure in manual mode: no false global pause
+PASS 12-second background read failure in rotation mode: no false global pause
+PASS genuine disconnect still triggers safety pause
+
+PASS screenshot window 1: 10 slots, item slots [10], no consumable selection
+PASS screenshot window 2: 4 slots, item slots [4], no consumable selection
+PASS screenshot window 3: 8 slots, item slots [3, 4, 5, 6, 7, 8], no consumable selection
+PASS earlier setup screenshot: 10 slots, Dracula slot 2, next slot 3
+PASS bottom-edge coordinates and tracked-vs-unrelated overlap distinction
+PASS overlapping startup scans one foreground window at a time and restores main
+PASS 22-second overlapping-hotbar simulation: no pause, start/end still detected
+PASS tracked overlap over banner retains verdict without a false pause
+
+Screenshot: [(1, (176, 29, 44, 44), False, None, 'item; excluded from rotation'), (2, (221, 29, 44, 44), False, True, 'B[Drocula)|'), (3, (266, 29, 44, 44), False, False, 'no red mutation label'), (4, (311, 29, 44, 44), False, False, 'no red mutation label'), (5, (356, 29, 44, 44), False, False, 'no red mutation label'), (6, (402, 29, 44, 44), False, False, 'no red mutation label'), (7, (447, 29, 44, 44), False, False, 'no red mutation label'), (8, (492, 29, 44, 44), False, False, 'no red mutation label'), (9, (538, 29, 44, 44), False, False, 'no red mutation label'), (10, (582, 29, 44, 44), False, False, 'no red mutation label')]
+Recentered: 2 detected 2 target 0
+Recentered: 3 detected 3 target 3
+Recentered: 5 detected 5 target 3
+Recentered: 7 detected 7 target 3
+PASS: full reference, recentered inventories, incomplete-row rejection
+Blue highlight: 2 selected [2] next 3
+Blue highlight: 3 selected [3] next 3
+Blue highlight: 9 selected [9] next 3
+Blue highlight: 10 selected [10] next 3
+All mutation reads: [(1, None, 'item; excluded from rotation'), (2, True, 'B[Drocula)|'), (3, True, 'B[ Dracula)'), (4, True, 'B[ Dracula)'), (5, True, 'B(Drocula)|'), (6, True, 'iDrocula)l'), (7, True, '‘Dracula'), (8, True, '‘Dracula'), (9, True, '(Orocula'), (10, True, 'i[Drocula)}')]
+PASS: numbered selected borders, successive Dracula, all-complete detection
+PASS: rotation, no accidental retoggle, event-end cleanup, all-complete, unknown, rod, key 0
+
+Historical validation:
+
+Macro Studio 2.3 validation
+Real image processing on supplied debug captures; Windows focus/timing mocked.
+Live Windows/Roblox operation was not tested in this environment.
+
+PASS actual capture 1: 10 slots, next character 2, items [10] excluded
+PASS capture 1: removing each slot in turn rejects incomplete rows
+PASS actual capture 2: 4 slots, next character 2, items [4] excluded
+PASS capture 2: removing each slot in turn rejects incomplete rows
+PASS actual capture 3: 10 slots, next character 2, items [3, 4, 5, 6, 7, 8, 9, 10] excluded
+PASS capture 3: removing each slot in turn rejects incomplete rows
+PASS empty capture rejected
+
+PASS latest selected-slot screenshot: 10 cards, slot 2 equipped, potion excluded
+PASS grid fallback rejects blank/missing middle cards instead of guessing their presence
+PASS visibility uses detected card bounds, excluding lower frame/unused crop margins
+PASS a transient failed frame retries and recovers before any character input
+PASS 12-second background read failure in manual mode: no false global pause
+PASS 12-second background read failure in rotation mode: no false global pause
+PASS genuine disconnect still triggers safety pause
+
+PASS screenshot window 1: 10 slots, item slots [10], no consumable selection
+PASS screenshot window 2: 4 slots, item slots [4], no consumable selection
+PASS screenshot window 3: 8 slots, item slots [3, 4, 5, 6, 7, 8], no consumable selection
+PASS earlier setup screenshot: 10 slots, Dracula slot 2, next slot 3
+PASS bottom-edge coordinates and tracked-vs-unrelated overlap distinction
+PASS overlapping startup scans one foreground window at a time and restores main
+PASS 22-second overlapping-hotbar simulation: no pause, start/end still detected
+PASS tracked overlap over banner retains verdict without a false pause
+
+Screenshot: [(1, (176, 29, 44, 44), False, None, 'item; excluded from rotation'), (2, (221, 29, 44, 44), False, True, 'B[Drocula)|'), (3, (266, 29, 44, 44), False, False, 'no red mutation label'), (4, (311, 29, 44, 44), False, False, 'no red mutation label'), (5, (356, 29, 44, 44), False, False, 'no red mutation label'), (6, (402, 29, 44, 44), False, False, 'no red mutation label'), (7, (447, 29, 44, 44), False, False, 'no red mutation label'), (8, (492, 29, 44, 44), False, False, 'no red mutation label'), (9, (538, 29, 44, 44), False, False, 'no red mutation label'), (10, (582, 29, 44, 44), False, False, 'no red mutation label')]
+Recentered: 2 detected 2 target 0
+Recentered: 3 detected 3 target 3
+Recentered: 5 detected 5 target 3
+Recentered: 7 detected 7 target 3
+PASS: full reference, recentered inventories, incomplete-row rejection
+Blue highlight: 2 selected [2] next 3
+Blue highlight: 3 selected [3] next 3
+Blue highlight: 9 selected [9] next 3
+Blue highlight: 10 selected [10] next 3
+All mutation reads: [(1, None, 'item; excluded from rotation'), (2, True, 'B[Drocula)|'), (3, True, 'B[ Dracula)'), (4, True, 'B[ Dracula)'), (5, True, 'B(Drocula)|'), (6, True, 'iDrocula)l'), (7, True, '‘Dracula'), (8, True, '‘Dracula'), (9, True, '(Orocula'), (10, True, 'i[Drocula)}')]
+PASS: numbered selected borders, successive Dracula, all-complete detection
+PASS: rotation, no accidental retoggle, event-end cleanup, all-complete, unknown, rod, key 0
+
+Historical validation:
+
+Macro Studio 2.2 validation
+Syntax: PASS
+PASS latest selected-slot screenshot: 10 cards, slot 2 equipped, potion excluded
+PASS grid fallback rejects blank/missing middle cards instead of guessing their presence
+PASS visibility uses detected card bounds, excluding lower frame/unused crop margins
+PASS a transient failed frame retries and recovers before any character input
+PASS 12-second background read failure in manual mode: no false global pause
+PASS 12-second background read failure in rotation mode: no false global pause
+PASS genuine disconnect still triggers safety pause
+
+Previous hotbar/overlap and rotation regression suites: PASS after grid and visibility changes.
+Windows focus and watchdog timers were mocked; no live Windows/game test.
+
+Historical validation:
+Hallows Eve Macro Studio 2.1 — hotbar/overlap fixes
+Windows focus calls are mocked; screenshot image processing is real.
+
+test_overlap_fix.py
+PASS screenshot window 1: 10 slots, item slots [10], no consumable selection
+PASS screenshot window 2: 4 slots, item slots [4], no consumable selection
+PASS screenshot window 3: 8 slots, item slots [3, 4, 5, 6, 7, 8], no consumable selection
+PASS earlier setup screenshot: 10 slots, Dracula slot 2, next slot 3
+PASS bottom-edge coordinates and tracked-vs-unrelated overlap distinction
+PASS overlapping startup scans one foreground window at a time and restores main
+PASS 22-second overlapping-hotbar simulation: no pause, start/end still detected
+PASS tracked overlap over banner retains verdict without a false pause
+
+
+test_rotation_updated.py
+Screenshot: [(1, (176, 29, 44, 44), False, None, 'item; excluded from rotation'), (2, (221, 29, 44, 44), False, True, 'B[Drocula)|'), (3, (266, 29, 44, 44), False, False, 'no red mutation label'), (4, (311, 29, 44, 44), False, False, 'no red mutation label'), (5, (356, 29, 44, 44), False, False, 'no red mutation label'), (6, (402, 29, 44, 44), False, False, 'no red mutation label'), (7, (447, 29, 44, 44), False, False, 'no red mutation label'), (8, (492, 29, 44, 44), False, False, 'no red mutation label'), (9, (538, 29, 44, 44), False, False, 'no red mutation label'), (10, (582, 29, 44, 44), False, False, 'no red mutation label')]
+Recentered: 2 detected 2 target 0
+Recentered: 3 detected 3 target 3
+Recentered: 5 detected 5 target 3
+Recentered: 7 detected 7 target 3
+PASS: full reference, recentered inventories, incomplete-row rejection
+Blue highlight: 2 selected [2] next 3
+Blue highlight: 3 selected [3] next 3
+Blue highlight: 9 selected [9] next 3
+Blue highlight: 10 selected [10] next 3
+All mutation reads: [(1, None, 'item; excluded from rotation'), (2, True, 'B[Drocula)|'), (3, True, 'B[ Dracula)'), (4, True, 'B[ Dracula)'), (5, True, 'B(Drocula)|'), (6, True, 'iDrocula)l'), (7, True, '‘Dracula'), (8, True, '‘Dracula'), (9, True, '(Orocula'), (10, True, 'i[Drocula)}')]
+PASS: numbered selected borders, successive Dracula, all-complete detection
+PASS: rotation, no accidental retoggle, event-end cleanup, all-complete, unknown, rod, key 0
+
+
+Prior version validation (historical):
+Hallows Eve Macro Studio 2.0 — development validation
+Platform: Linux; Windows/game actions mocked. No live-game or EXE-launch claim.
+
+PASS: all deliverable Python files compile
+
+test_reliability.py
+PASS visual reference/negative at five scales: [(0.65, 0.865, 0.491), (0.8, 0.805, 0.491), (1, 0.895, 0.491), (1.2, 0.782, 0.492), (1.6, 0.817, 0.492)]
+PASS flicker rejection, unknown-state retention, and fresh end confirmation after occlusion
+PASS completion requires every tracked window and rejects stale/partial evidence
+PASS disconnect blocks resumed automation and trips input cancellation
+PASS threaded screenshot simulation: start 0.295s; end 0.612s with 1.2s OCR running separately
+All engine checks passed. These are local simulations, not live Windows/Roblox measurements.
+
+
+
+test_reliability_ui.py
+PASS diagnostic exports: valid ZIP, logs/settings/results, crops opt-in, configured OCR path omitted
+PASS progress display, controls and persistence, setup results, job interlocks and completion notification
+
+This plugin does not support propagateSizeHints()
+
+
+test_windows_build.py
+
+Built: /tmp/tmp_mogf48u/dist/HallowsEveMacro-Windows.zip
+Extract the ZIP and open HallowsEveMacro.exe. Share the whole ZIP, not just the EXE.
+Before sharing, test on a Windows account without Python/Tesseract installed. This script does not claim an in-game test.
+PASS: mocked Windows build creates complete-folder ZIP with OCR DLLs, English data, notices and version record
+Windows installer, PyInstaller binary output and clean-PC launch remain untested on this Linux host.
+
+
+
+Previous Dracula regression run: PASS full/recentered 2/3/5/7/10 cards; incomplete-row rejection; equipped borders; successive/all Dracula labels; no retoggle; event-end cleanup; unknown rejection; rod handling; slot 10/key 0.
+UI screenshots inspected: Diagnostics live preview, guided setup, recovery overview, Automation settings.

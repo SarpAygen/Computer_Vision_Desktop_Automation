@@ -1,0 +1,103 @@
+Hallows Eve Macro Studio 3.3.4 validation — 2026-10-28
+Linux replay: Windows input/focus simulated; real OpenCV/Tesseract fixtures where applicable.
+No live Windows/Roblox timing guarantee.
+
+test_fast_events.py
+PASS manual four-window first sweep 0.555s; first input 0.040s; all confirmed by 0.765s (simulated, with saved normal focus delay=10s)
+PASS smart four-window first sweep 0.555s; first input 0.040s; all confirmed by 0.765s (simulated, with saved normal focus delay=10s)
+PASS missed first input does not block peers; only the missed window retries after the late-input guard
+PASS changed layout/type/size or red mutation defers full scanning without a guessed equip
+PASS actual red-label screening defers OCR; blank label is eligible
+PASS four-window unequip first sweep 0.395s; all confirmed by 0.705s; zero extra confirmation focus switches (simulated)
+PASS overlapping cleanup completes in one confirmation visit per window without extra input
+Local simulated timings exclude screenshot processing, real Windows activation and Roblox rendering/network delays.
+Exit code: 0
+
+test_equip_confirmation.py
+PASS dropped inputs in two windows are visually detected and retried; successful third window is never toggled again
+PASS delayed input is recognized before retry and does not toggle the unit off
+PASS covered-banner retry yields after input; next visit confirms without repeating the key or initial settle delay
+PASS fallback ignores stale equipped flags and confirms its configured slot
+PASS 30-second hidden hotbar stays unconfirmed; retries resume only after readable absence
+PASS conflicting pre-input observations defer without a toggle or false confirmation
+PASS final fresh read catches a late selection before a repeat toggle
+PASS wrong selected character is corrected to the exact target; slot 10 uses key 0
+PASS smart rotation skips Dracula slots and retries its chosen slot without repeating mutation OCR
+PASS all-Dracula window remains unequipped with no endless equip retry
+PASS event end, early cleanup, and a latched back-to-back event block a late equip
+PASS event-end preempts confirmation; tracked command remains available to immediate cleanup
+PASS real equipped/unselected screenshots classified correctly; blank frame remains unknown
+Exit code: 0
+
+test_event_equip.py
+PASS actual scheduler: first two windows skipped, third equipped, only skipped windows retried and recovered
+PASS event end interrupts a retry before input and cleanup clears old pending equips
+PASS unconfirmed cleanup blocks only its window; early cleanup cancels all further event equips
+PASS disconnected pending window is dropped without stopping surviving windows
+PASS a previously sent manual equip still requires visual verification
+PASS per-window exceptions schedule recovery; completed/all-Dracula windows are not retried
+Exit code: 0
+
+test_confirmed_cleanup.py
+PASS three-window dropped-key replay: first sweep 0.315s; all visually confirmed by 0.835s (simulated focus/input delays)
+PASS delayed toggle acknowledgements do not re-equip characters
+PASS missed toggle is retried using current selected slot, not an old commanded flag
+PASS slot 10/key 0 cleanup and repeated event-end acknowledgement do not re-toggle
+PASS hidden animation stays pending for 30 seconds; confirmed peers continue; no re-equip before confirmation
+PASS unreadable recovery waits between focus sweeps and keeps all windows pending
+PASS refused focus remains in recovery while the other windows are put away
+PASS a key-blocking popup is closed after the other windows receive their first put-away
+PASS late idle equip overrides an old put-away command and triggers recovery
+PASS hidden or unknown selection is not mistaken for a confirmed unequip
+PASS real selected hotbar recognized; known rod artwork enables repeatable put-away; character artwork rejected
+PASS real countdown OCR; two decreasing consistent readings required; 2-second margin and disabled margin
+PASS countdown triggers early cleanup once; old title cannot re-equip; a subsequent event starts normally
+PASS countdown OCR failure leaves fast visual cleanup working
+PASS extended banner occlusion triggers protective cleanup without a global pause
+Input timing is simulated; image processing/OCR and detector threads are real. No live Windows/Roblox guarantee.
+Exit code: 0
+
+test_event_priority.py
+PASS slow OCR interrupted by latched event-end in 1 ms; stale result discarded
+PASS visual start: end detected in 123 ms; countdown change ignored
+PASS OCR-assisted start: end detected in 102 ms; countdown change ignored
+PASS stale positive OCR rejected against current banner
+PASS manual equip command is tracked even when the event ends during the keypress
+PASS active events suspend all chores; cleanup precedes a back-to-back event and idle work resumes afterward
+Windows focus and input are mocked. Measured timings are local replay results, not live Roblox guarantees.
+Exit code: 0
+
+test_focus.py
+PASS normal/urgent focus is mouse-free; already-focused windows are a no-op; refusal is reported
+PASS urgent keypress cannot leak into another foreground window
+PASS 60 seconds of visible idle hotbar checks causes zero focus changes
+PASS covered idle hotbars are audited once per 20 seconds, not once per second
+PASS a visible late equip still queues immediate priority cleanup without focusing first
+PASS returning to the event monitor only changes focus when its banner is covered
+PASS asynchronous Windows activation is awaited before declaring failure
+PASS bounded overlap fallback preserves coordinates, size and topmost state
+PASS refused urgent focus is bounded to 120 ms of polling, so peers can proceed
+Exit code: 0
+
+test_window_recovery.py
+PASS secondary disconnect stays excluded; original slots preserved; stale input blocked
+PASS window closes mid-pass: both remaining windows continue
+PASS disconnected main window at startup is skipped; event source promoted
+PASS completion excludes invalid windows; no windows stops safely
+PASS foreground maintenance excludes a disconnected window and verifies the other two
+PASS independent connection monitor excludes a disconnected event source during an event
+PASS active event survives main-window closure; replacement detects the actual event end
+PASS stale positive OCR from a disconnected source is discarded
+PASS real Daily Rewards title/X detected at 75%, 100%, 125%, 150%; missing title or X rejected
+PASS moved-window click lands on red X; disappearing popup and an event during OCR prevent clicks
+PASS popup checks are rate limited per window, deferred during events, and configurable
+Windows focus and input are mocked. Live Roblox acceptance and unseen popup layouts are not verified.
+Exit code: 0
+
+test_performance.py
+PASS 25 diagnostic frames publish 5 image copies; covered/recovered states are immediate and keys remain independent
+PASS cached immutable template bank with independent per-matcher state; 500 warm initializations in 0.1 ms
+PASS real positive/negative/banner-return sequence; no game verdicts or hotbar readings are cached
+Exit code: 0
+
+All eight regression scripts passed.

@@ -1,0 +1,9 @@
+3.5.0 audit performance and equivalence report
+Actual local OpenCV processing. Screen capture, Windows focus, network and Roblox rendering are excluded.
+PASS identical slot geometry, selection and card types on 32 fixture variants: selected/unselected, scaled, blurred, covered and blank.
+Warm median snapshot (7 batches of 150), version 3.4.0: 1.710 ms; version 3.5.0 with artwork/label validation: 1.766 ms.
+Change: +3.2%. The new validation has a cost; this is not a claim of faster image processing.
+Primary responsiveness change: missing-plan mutation OCR now runs outside the foreground action worker, with at most two outstanding scans.
+The audit test holds an OCR result pending through 100 polls: zero extra focus calls and one submitted scan; a peer equips before the result finishes.
+The 100000-message UI stress stays within the configured mailbox limit; the two-worker executor rejects 1000 excess submissions without queue growth.
+See VALIDATION_3_5.log for detector, input and Qt results. No live Roblox acceptance, overnight reliability or packaged Windows install was tested.
