@@ -1,3 +1,224 @@
+VERSION 3.3 — Halloween interface and reduced UI overhead
+2026-10-15
+
+Validation: Linux replay, real OpenCV/Tesseract, detector threads and offscreen Qt.
+The desktop interface was reviewed at 1280x900 and 1000x700 logical pixels.
+Qt controls were exercised with default and 125 percent offscreen scaling.
+Windows input/focus and Roblox responses are mocked. No live game or Windows executable test was performed.
+Local replay measurements do not establish whole-application CPU usage or live game latency.
+
+PASS core event, equipment, hotbar and scheduling functions retain the version 3.2 syntax tree.
+PASS new interface rendered and reviewed across dashboard, all settings categories, diagnostics and activity.
+
+Event priority regression
+PASS slow OCR interrupted by latched event-end in 1 ms; stale result discarded
+PASS visual start: end detected in 124 ms; countdown change ignored
+PASS OCR-assisted start: end detected in 103 ms; countdown change ignored
+PASS stale positive OCR rejected against current banner
+PASS manual equip command is tracked even when the event ends during the keypress
+PASS active events suspend all chores; cleanup precedes a back-to-back event and idle work resumes afterward
+Windows focus and input are mocked. Measured timings are local replay results, not live Roblox guarantees.
+
+Disconnected window and popup recovery
+PASS secondary disconnect stays excluded; original slots preserved; stale input blocked
+PASS window closes mid-pass: both remaining windows continue
+PASS disconnected main window at startup is skipped; event source promoted
+PASS completion excludes invalid windows; no windows stops safely
+PASS foreground maintenance excludes a disconnected window and verifies the other two
+PASS independent connection monitor excludes a disconnected event source during an event
+PASS active event survives main-window closure; replacement detects the actual event end
+PASS stale positive OCR from a disconnected source is discarded
+PASS real Daily Rewards title/X detected at 75%, 100%, 125%, 150%; missing title or X rejected
+PASS moved-window click lands on red X; disappearing popup and an event during OCR prevent clicks
+PASS popup checks are rate limited per window, deferred during events, and configurable
+Windows focus and input are mocked. Live Roblox acceptance and unseen popup layouts are not verified.
+
+Confirmed cleanup and countdown protection
+PASS three-window dropped-key replay: first sweep 0.315s; all visually confirmed by 0.875s (simulated focus/input delays)
+PASS delayed toggle acknowledgements do not re-equip characters
+PASS missed toggle is retried using current selected slot, not an old commanded flag
+PASS slot 10/key 0 cleanup and repeated event-end acknowledgement do not re-toggle
+PASS hidden animation stays pending for 30 seconds; confirmed peers continue; no re-equip before confirmation
+PASS refused focus remains in recovery while the other windows are put away
+PASS a key-blocking popup is closed after the other windows receive their first put-away
+PASS late idle equip overrides an old put-away command and triggers recovery
+PASS hidden or unknown selection is not mistaken for a confirmed unequip
+PASS real selected hotbar recognized; known rod artwork enables repeatable put-away; character artwork rejected
+PASS real countdown OCR; two decreasing consistent readings required; 2-second margin and disabled margin
+PASS countdown triggers early cleanup once; old title cannot re-equip; a subsequent event starts normally
+PASS countdown OCR failure leaves fast visual cleanup working
+PASS extended banner occlusion triggers protective cleanup without a global pause
+Input timing is simulated; image processing/OCR and detector threads are real. No live Windows/Roblox guarantee.
+
+Real offscreen Qt interface
+PASS real Qt navigation: all 4 main pages, 4 settings categories and 3 diagnostic categories at 1280 and 1000 px
+PASS settings bindings and persistence across categories; webhook remains masked
+PASS skipped and absent windows, mutation progress and explicit cleanup confirmation states
+PASS 600-message UI burst: 3 batched appends, zero full document replacements (22 ms local replay)
+PASS warning/equipment search filters and bounded 1500-line log retention
+PASS preview reuse, hidden-tab work suppression and stale/covered image replacement
+PASS reduced motion, hidden-page timer suspension, running-state locks, Stop and restart reset
+Windows input, actual game rendering and real monitor DPI remain untested.
+
+Offscreen Qt at 125 percent scaling
+PASS real Qt navigation: all 4 main pages, 4 settings categories and 3 diagnostic categories at 1280 and 1000 px
+PASS settings bindings and persistence across categories; webhook remains masked
+PASS skipped and absent windows, mutation progress and explicit cleanup confirmation states
+PASS 600-message UI burst: 3 batched appends, zero full document replacements (26 ms local replay)
+PASS warning/equipment search filters and bounded 1500-line log retention
+PASS preview reuse, hidden-tab work suppression and stale/covered image replacement
+PASS reduced motion, hidden-page timer suspension, running-state locks, Stop and restart reset
+Windows input, actual game rendering and real monitor DPI remain untested.
+
+Performance and preview invariants
+PASS 25 diagnostic frames publish 5 image copies; covered/recovered states are immediate and keys remain independent
+PASS cached immutable template bank with independent per-matcher state; 500 warm initializations in 0.2 ms
+PASS real positive/negative/banner-return sequence; no game verdicts or hotbar readings are cached
+
+--- Previous release validation ---
+
+VERSION 3.2 — confirmed put-away, missed-input recovery and countdown safety margin
+2026-10-15
+
+Validation: Linux replay with real OpenCV, Tesseract, detector threads and offscreen Qt.
+Windows focus, SendInput acceptance, and game response are simulated.
+No live Roblox session or Windows executable was tested. Replay timings are not live guarantees.
+
+Confirmed cleanup, countdown and recovery regression
+PASS three-window dropped-key replay: first sweep 0.315s; all visually confirmed by 0.875s (simulated focus/input delays)
+PASS delayed toggle acknowledgements do not re-equip characters
+PASS missed toggle is retried using current selected slot, not an old commanded flag
+PASS slot 10/key 0 cleanup and repeated event-end acknowledgement do not re-toggle
+PASS hidden animation stays pending for 30 seconds; confirmed peers continue; no re-equip before confirmation
+PASS refused focus remains in recovery while the other windows are put away
+PASS a key-blocking popup is closed after the other windows receive their first put-away
+PASS late idle equip overrides an old put-away command and triggers recovery
+PASS hidden or unknown selection is not mistaken for a confirmed unequip
+PASS real selected hotbar recognized; known rod artwork enables repeatable put-away; character artwork rejected
+PASS real countdown OCR; two decreasing consistent readings required; 2-second margin and disabled margin
+PASS countdown triggers early cleanup once; old title cannot re-equip; a subsequent event starts normally
+PASS countdown OCR failure leaves fast visual cleanup working
+PASS extended banner occlusion triggers protective cleanup without a global pause
+Input timing is simulated; image processing/OCR and detector threads are real. No live Windows/Roblox guarantee.
+
+Event priority regression
+PASS slow OCR interrupted by latched event-end in 1 ms; stale result discarded
+PASS visual start: end detected in 121 ms; countdown change ignored
+PASS OCR-assisted start: end detected in 103 ms; countdown change ignored
+PASS stale positive OCR rejected against current banner
+PASS manual equip command is tracked even when the event ends during the keypress
+PASS active events suspend all chores; cleanup precedes a back-to-back event and idle work resumes afterward
+Windows focus and input are mocked. Measured timings are local replay results, not live Roblox guarantees.
+
+Window recovery and Daily Rewards regression
+PASS secondary disconnect stays excluded; original slots preserved; stale input blocked
+PASS window closes mid-pass: both remaining windows continue
+PASS disconnected main window at startup is skipped; event source promoted
+PASS completion excludes invalid windows; no windows stops safely
+PASS foreground maintenance excludes a disconnected window and verifies the other two
+PASS independent connection monitor excludes a disconnected event source during an event
+PASS active event survives main-window closure; replacement detects the actual event end
+PASS stale positive OCR from a disconnected source is discarded
+PASS real Daily Rewards title/X detected at 75%, 100%, 125%, 150%; missing title or X rejected
+PASS moved-window click lands on red X; disappearing popup and an event during OCR prevent clicks
+PASS popup checks are rate limited per window, deferred during events, and configurable
+Windows focus and input are mocked. Live Roblox acceptance and unseen popup layouts are not verified.
+
+Hotbar regression
+PASS top-right slots 2-5: no false red-label warnings across 5 crop alignments
+PASS latest main and bottom-left captures: characters retained, all potions excluded, next slot 2
+PASS real Dracula label remains detected with 0-4 pixel downward crop errors
+PASS unreadable red lettering and unidentified coloured cards remain unknown
+Supplied debug PNGs are annotated; Windows focus/input and live gameplay are not tested here.
+
+Rotation regression
+Screenshot: [(1, (176, 29, 44, 44), False, None, 'item; excluded from rotation'), (2, (221, 29, 44, 44), False, True, 'B[Drocula)|'), (3, (266, 29, 44, 44), False, False, 'no red mutation label'), (4, (311, 29, 44, 44), False, False, 'no red mutation label'), (5, (356, 29, 44, 44), False, False, 'no red mutation label'), (6, (402, 29, 44, 44), False, False, 'no red mutation label'), (7, (447, 29, 44, 44), False, False, 'no red mutation label'), (8, (492, 29, 44, 44), False, False, 'no red mutation label'), (9, (538, 29, 44, 44), False, False, 'no red mutation label'), (10, (582, 29, 44, 44), False, False, 'no red mutation label')]
+Recentered: 2 detected 2 target 0
+Recentered: 3 detected 3 target 3
+Recentered: 5 detected 5 target 3
+Recentered: 7 detected 7 target 3
+PASS: full reference, recentered inventories, incomplete-row rejection
+Blue highlight: 2 selected [2] next 3
+Blue highlight: 3 selected [3] next 3
+Blue highlight: 9 selected [9] next 3
+Blue highlight: 10 selected [10] next 3
+All mutation reads: [(1, None, 'item; excluded from rotation'), (2, True, 'B[Drocula)|'), (3, True, 'B[ Dracula)'), (4, True, 'B[ Dracula)'), (5, True, 'B(Drocula)|'), (6, True, 'iDrocula)l'), (7, True, '‘Dracula'), (8, True, '‘Dracula'), (9, True, '(Orocula'), (10, True, 'i[Drocula)}')]
+PASS: numbered selected borders, successive Dracula, all-complete detection
+PASS: rotation, no accidental retoggle, event-end cleanup, all-complete, unknown, rod, key 0
+
+Offscreen desktop interface checks
+PASS real Qt: countdown margin and Daily Rewards toggle persist; skipped status resists late state messages; restart clears exclusions
+
+--- Previous release validation ---
+
+VERSION 3.1 — disconnected window exclusion and Daily Rewards closing
+2026-10-15
+
+Validation: Linux replay, real OpenCV/Tesseract and offscreen Qt; Windows focus/input mocked.
+No live Roblox, Windows executable, or reconnect test was performed.
+
+Event priority regression
+PASS slow OCR interrupted by latched event-end in 21 ms; stale result discarded
+PASS visual start: end detected in 209 ms; countdown change ignored
+PASS OCR-assisted start: end detected in 183 ms; countdown change ignored
+PASS stale positive OCR rejected against current banner
+PASS manual equip command is tracked even when the event ends during the keypress
+PASS smart and fallback cleanup uses each tracked key once, including key 0, before a subsequent event
+PASS active events suspend all chores; cleanup precedes a back-to-back event and idle work resumes afterward
+Windows focus and input are mocked. Measured timings are local replay results, not live Roblox guarantees.
+
+Window recovery and Daily Rewards regression
+PASS secondary disconnect stays excluded; original slots preserved; stale input blocked
+PASS window closes mid-pass: both remaining windows continue
+PASS disconnected main window at startup is skipped; event source promoted
+PASS event cleanup continues after focus failure; completion excludes invalid windows; no windows stops safely
+PASS foreground maintenance excludes a disconnected window and verifies the other two
+PASS independent connection monitor excludes a disconnected event source during an event
+PASS active event survives main-window closure; replacement detects the actual event end
+PASS stale positive OCR from a disconnected source is discarded
+PASS real Daily Rewards title/X detected at 75%, 100%, 125%, 150%; missing title or X rejected
+PASS moved-window click lands on red X; disappearing popup and an event during OCR prevent clicks
+PASS popup checks are rate limited per window, deferred during events, and configurable
+Windows focus and input are mocked. Live Roblox acceptance and unseen popup layouts are not verified.
+
+Hotbar regression
+PASS top-right slots 2-5: no false red-label warnings across 5 crop alignments
+PASS latest main and bottom-left captures: characters retained, all potions excluded, next slot 2
+PASS real Dracula label remains detected with 0-4 pixel downward crop errors
+PASS unreadable red lettering and unidentified coloured cards remain unknown
+Supplied debug PNGs are annotated; Windows focus/input and live gameplay are not tested here.
+
+Manual fallback regression
+PASS fallback preserves slot 3 and sends once per event transition without scans
+PASS fast put-away uses tracked slot once and preserves key after fallback
+PASS no new equip when the event has already ended
+PASS visible-but-uncertain reads retry then fall back without pausing or retoggling
+
+UI regression
+PASS real Qt: Daily Rewards toggle persists; skipped status resists late state messages; restart clears exclusions
+
+PASS application, test, and build script syntax.
+
+Previous version validation (historical):
+
+VERSION 3.0 — event priority and prompt end cleanup
+2026-10-14
+
+PASS slow OCR interrupted by latched event-end in 21 ms; stale result discarded
+PASS visual start: end detected in 201 ms; countdown change ignored
+PASS OCR-assisted start: end detected in 266 ms; countdown change ignored
+PASS stale positive OCR rejected against current banner
+PASS manual equip command is tracked even when the event ends during the keypress
+PASS smart and fallback cleanup uses each tracked key once, including key 0, before a subsequent event
+PASS active events suspend all chores; cleanup precedes a back-to-back event and idle work resumes afterward
+Windows focus and input are mocked. Measured timings are local replay results, not live Roblox guarantees.
+
+PASS existing mutation crop/potion regression checks (2.9).
+PASS dynamic hotbar, real Dracula labels, selected slots, consecutive mutations and key 0 regression checks.
+PASS eight real failed-capture frames and incomplete row rejection.
+PASS manual fallback retry and single-toggle regression checks.
+PASS application syntax.
+
 VERSION 2.9 — targeted label and potion fixes
 Source AST syntax: PASS
 

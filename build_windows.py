@@ -43,8 +43,8 @@ def main():
     parser.add_argument("--tesseract-dir", help="A complete Tesseract-OCR folder, including DLLs and tessdata")
     parser.add_argument("--without-tesseract", action="store_true", help="Let first launch install OCR through winget instead of bundling it")
     args = parser.parse_args()
-    if not (ROOT/"hallows_eve_macro.py").is_file():
-        raise SystemExit("Keep this script beside hallows_eve_macro.py.")
+    if not all((ROOT/name).is_file() for name in ("hallows_eve_macro.py", "macro_runtime.py")):
+        raise SystemExit("Extract the complete project; keep hallows_eve_macro.py and macro_runtime.py beside this script.")
     tess = None if args.without_tesseract else find_tesseract(args.tesseract_dir)
     if not args.without_tesseract and tess is None:
         winget = shutil.which("winget")
@@ -72,6 +72,8 @@ def main():
     elif (bundle/"Tesseract-OCR").exists():
         raise SystemExit("Unexpected old Tesseract folder in the output; use a clean build directory.")
     shutil.copy2(ROOT/"README.md", bundle/"README.md")
+    if (ROOT/"docs").is_dir():
+        shutil.copytree(ROOT/"docs", bundle/"docs", dirs_exist_ok=True)
     freeze = subprocess.check_output([str(python),"-m","pip","freeze"], text=True)
     (bundle/"build-versions.txt").write_text(freeze, encoding="utf-8")
     # Retain Python package license metadata for distribution alongside Qt/Tesseract notices.

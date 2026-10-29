@@ -1,0 +1,49 @@
+Hallows Eve Macro Studio 3.3.3 — equip confirmation validation
+Validation date: 2026-10-23 (America/Toronto)
+Environment: Linux; Windows foreground and keyboard input mocked.
+Actual OpenCV hotbar screenshots, Tesseract OCR and detector threads used where applicable.
+No live Roblox or Windows input acceptance/timing guarantee.
+
+PASS: all packaged Python files parse successfully.
+PASS: tests/test_equip_confirmation.py (13 scenarios)
+  Dropped first inputs on two of three windows recover independently.
+  Successfully equipped third window receives no extra toggle.
+  Delayed input is confirmed before any repeat toggle.
+  Covered-banner retry yields after input; confirmation resumes next visit.
+  Manual fallback confirms the exact configured slot despite stale command flags.
+  A hidden hotbar stays unconfirmed through 30 seconds; no blind repeat toggle.
+  Conflicting readings do not confirm or authorize a toggle.
+  Final fresh read catches a late selection before another key.
+  Wrong selected slot is corrected; slot 10 maps to key 0.
+  Smart mode skips Dracula slots and avoids mutation OCR during equip recovery.
+  All-Dracula windows are left unequipped without endless retries.
+  Event end, early cleanup and a latched prior end block late equips.
+  Event end preempts confirmation without losing the cleanup hint.
+  Real selected/unselected fixtures classify correctly; blank frames remain unknown.
+PASS: tests/test_event_equip.py
+  Actual scheduler recovers skipped windows, isolates disconnects,
+  preserves cleanup priority, and requires verification of sent manual commands.
+PASS: tests/test_focus.py
+  Mouse-free activation, bounded foreground verification, no window movement,
+  idle focus rate limits and wrong-window input protection.
+PASS: tests/test_confirmed_cleanup.py
+  Dropped/delayed put-away input, hidden animations, unavailable focus,
+  popup recovery, actual hotbar/countdown screenshots, countdown and occlusion guards.
+PASS: tests/test_event_priority.py
+  Stale OCR discarded, event-end interruption, command tracked during key hold,
+  back-to-back event ordering and suspension of routine event-time chores.
+PASS: tests/test_window_recovery.py
+  Disconnections isolated; monitor replacement; daily popup visual checks and rate limits.
+PASS: tests/test_performance.py
+  Bounded diagnostic publication; cached static templates; fresh event verdicts.
+
+All seven regression scripts completed with exit code 0 after updating the AST
+harness in test_event_priority.py to load the new equip helper functions.
+To reproduce, use Python with OpenCV, NumPy, pytesseract and Tesseract installed:
+  python tests/test_equip_confirmation.py
+  python tests/test_event_equip.py
+  python tests/test_focus.py
+  python tests/test_confirmed_cleanup.py
+  python tests/test_event_priority.py
+  python tests/test_window_recovery.py
+  python tests/test_performance.py
